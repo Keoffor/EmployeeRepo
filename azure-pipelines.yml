@@ -10,6 +10,7 @@ pool: ubuntu20
 
 steps:
 - task: SonarCloudPrepare@1
+  displayName: Sonar Analysis
   inputs:
     SonarCloud: 'obaz-pro'
     organization: 'keoffor'
@@ -22,6 +23,7 @@ steps:
       sonar.projectName=reimbursementApi.git
 
 - task: Maven@3
+  displayName: Build maven package
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
@@ -30,7 +32,23 @@ steps:
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
     effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    sonarQubeRunAnalysis: true
+    isJacocoCoverageReportXML: true
+    sqMavenPluginVersionChoice: 'latest'
+    
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    codeCoverageToolOption: 'JaCoCo'
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: true
+    isJacocoCoverageReportXML: true
+    sqMavenPluginVersionChoice: 'latest'
 
 - task: Docker@2
   inputs:
