@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/reimbursement")
 public class RefundController {
-    @Value("${api.config.api2-url: http://localhost:8001/email}")
+    @Value("${api.config.api2-url: EMAIL_URL}")
     String email_url;
 
     @Autowired
