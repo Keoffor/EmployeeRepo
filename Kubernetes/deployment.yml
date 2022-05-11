@@ -14,7 +14,7 @@ spec:
         app: reimburse-app
     spec:
       containers:
-      - image: keoffor/reimburse
+      - image: keoffor/reimburse:v1
 #        env:
 #          - name: VALIDATION
 #            value: http://$(USER_SERVICE_SERVICE_HOST):8081/users/validate
