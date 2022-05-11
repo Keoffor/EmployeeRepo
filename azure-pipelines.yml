@@ -23,7 +23,7 @@ steps:
       sonar.projectName=reimbursementApi.git
 
 - task: Maven@3
-  displayName: Build maven package
+  displayName: Maven build package
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
@@ -37,6 +37,7 @@ steps:
     sqMavenPluginVersionChoice: 'latest'
     
 - task: Maven@3
+  displayName: publish artifacts
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
