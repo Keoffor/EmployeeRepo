@@ -14,7 +14,7 @@ spec:
         app: reimburse-app
     spec:
       containers:
-      - image: keoffor/reimburse:v1
+      - image: keoffor/reimburse
 #        env:
 #          - name: VALIDATION
 #            value: http://$(USER_SERVICE_SERVICE_HOST):8081/users/validate
@@ -42,7 +42,7 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: service-http
+    - name: service-https
       port: 8000
       targetPort: 8000
   selector:
