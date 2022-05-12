@@ -10,69 +10,88 @@ stages:
   displayName: build Maven package and Docker images
   pool: ubuntu20
   jobs:
-    - job: build
-      displayName: build
+  - job: build
+    displayName: build
 
-      steps:
-      - task: SonarCloudPrepare@1
-        displayName: Sonar Analysis
-        inputs:
-          SonarCloud: 'obaz-pro'
-          organization: 'keoffor'
-          scannerMode: 'Other'
-          extraProperties: |
-            # Additional properties that will be passed to the scanner,
-            # Put one key=value per line, example:
-            # sonar.exclusions=**/*.bin
-            sonar.projectKey=keoffor_reimbursementApi.git
-            sonar.projectName=reimbursementApi.git
+    steps:
+    - task: SonarCloudPrepare@1
+      displayName: Sonar Analysis
+      inputs:
+        SonarCloud: 'obaz-pro'
+        organization: 'keoffor'
+        scannerMode: 'Other'
+        extraProperties: |
+          # Additional properties that will be passed to the scanner,
+          # Put one key=value per line, example:
+          # sonar.exclusions=**/*.bin
+          sonar.projectKey=keoffor_reimbursementApi.git
+          sonar.projectName=reimbursementApi.git
 
-      - task: Maven@3
-        displayName: Maven package
-        inputs:
-          mavenPomFile: 'pom.xml'
-          publishJUnitResults: true
-          testResultsFiles: '**/surefire-reports/TEST-*.xml'
-          javaHomeOption: 'JDKVersion'
-          mavenVersionOption: 'Default'
-          mavenAuthenticateFeed: false
-          effectivePomSkip: false
-          sonarQubeRunAnalysis: true
-          isJacocoCoverageReportXML: true
-          sqMavenPluginVersionChoice: 'latest'
-          
-      - task: Maven@3
-        displayName: publish artifacts
-        inputs:
-          mavenPomFile: 'pom.xml'
-          publishJUnitResults: true
-          testResultsFiles: '**/surefire-reports/TEST-*.xml'
-          codeCoverageToolOption: 'JaCoCo'
-          javaHomeOption: 'JDKVersion'
-          mavenVersionOption: 'Default'
-          mavenAuthenticateFeed: true
-          effectivePomSkip: false
-          sonarQubeRunAnalysis: true
-          isJacocoCoverageReportXML: true
-          sqMavenPluginVersionChoice: 'latest'
+    - task: Maven@3
+      displayName: Maven package
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: true
+        isJacocoCoverageReportXML: true
+        sqMavenPluginVersionChoice: 'latest'
+        
+    - task: Maven@3
+      displayName: publish artifacts
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        codeCoverageToolOption: 'JaCoCo'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: true
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: true
+        isJacocoCoverageReportXML: true
+        sqMavenPluginVersionChoice: 'latest'
 
-      - task: Docker@2
-        displayName: Build Docker image
-        inputs:
-          containerRegistry: 'docker-pro'
-          repository: 'keoffor/reimburse'
-          command: 'buildAndPush'
-          Dockerfile: '**/Dockerfile'
-          tags: |
-            $(Build.BuildId)
-            latest
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
-          artifact: 'manifest'
-          publishLocation: 'pipeline'
+    - task: Docker@2
+      displayName: Build Docker image
+      inputs:
+        containerRegistry: 'docker-pro'
+        repository: 'keoffor/reimburse'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
+        artifact: 'manifest'
+        publishLocation: 'pipeline'
+   
+- stage: 
+  displayName: Deploy to Dev.
+  dependsOn: Build
+  pool: ubuntu20
+  variables:
+    acrsecret: obazsecret
+  jobs:
+  - job: deploy
+    steps:
       - task: DownloadPipelineArtifact@2
         inputs:
           buildType: 'current'
           artifactName: 'manifest'
-          targetPath: '$(Pipeline.Workspace)/manifests'
+          targetPath: '$(Pipeline.Workspace)/manifests'  
+      - task: KubernetesManifest@0
+        inputs:
+          action: 'createSecret'
+          kubernetesServiceConnection: 'obakuber'
+          namespace: 'default'
+          secretType: 'dockerRegistry'
+          secretName: '$(acrsecret)'
+          dockerRegistryEndpoint: 'docker-pro'
+      
