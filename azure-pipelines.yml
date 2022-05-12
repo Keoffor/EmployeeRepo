@@ -75,23 +75,28 @@ stages:
 - stage: 
   displayName: Deploy to Dev.
   dependsOn: Build
-  pool: ubuntu20
   variables:
     acrsecret: obazsecret
   jobs:
-  - job: deploy
-    steps:
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          buildType: 'current'
-          artifactName: 'manifest'
-          targetPath: '$(Pipeline.Workspace)/manifests'  
-      - task: KubernetesManifest@0
-        inputs:
-          action: 'createSecret'
-          kubernetesServiceConnection: 'obakuber'
-          namespace: 'default'
-          secretType: 'dockerRegistry'
-          secretName: '$(acrsecret)'
-          dockerRegistryEndpoint: 'docker-pro'
+  - deployment: deploy
+    pool: ubuntu20
+    displayName: Deploy to aks
+    environment: 'obazenv.default'
+    strategy:
+     runOnce:
+       deploy:  
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'manifest'
+              targetPath: '$(Pipeline.Workspace)/manifests'  
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'createSecret'
+              kubernetesServiceConnection: 'obakuber'
+              namespace: 'default'
+              secretType: 'dockerRegistry'
+              secretName: '$(acrsecret)'
+              dockerRegistryEndpoint: 'docker-pro'
       
