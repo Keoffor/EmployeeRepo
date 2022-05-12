@@ -40,70 +40,67 @@ stages:
         sonarQubeRunAnalysis: true
         isJacocoCoverageReportXML: true
         sqMavenPluginVersionChoice: 'latest'
-    - task: CmdLine@2
-      inputs:
-        script: mvn deploy
         
-    # - task: Maven@3
-    #   displayName: publish artifacts
-    #   inputs:
-    #     mavenPomFile: 'pom.xml'
-    #     publishJUnitResults: true
-    #     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    #     codeCoverageToolOption: 'JaCoCo'
-    #     javaHomeOption: 'JDKVersion'
-    #     mavenVersionOption: 'Default'
-    #     mavenAuthenticateFeed: true
-    #     effectivePomSkip: false
-    #     sonarQubeRunAnalysis: true
-    #     isJacocoCoverageReportXML: true
-    #     sqMavenPluginVersionChoice: 'latest'
+    - task: Maven@3
+      displayName: publish artifacts
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        codeCoverageToolOption: 'JaCoCo'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: true
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: true
+        isJacocoCoverageReportXML: true
+        sqMavenPluginVersionChoice: 'latest'
 
-    # - task: Docker@2
-    #   displayName: Build Docker image
-    #   inputs:
-    #     containerRegistry: 'docker-pro'
-    #     repository: 'keoffor/reimburse'
-    #     command: 'buildAndPush'
-    #     Dockerfile: '**/Dockerfile'
-    #     tags: |
-    #       $(Build.BuildId)
-    #       latest
-    # - task: PublishPipelineArtifact@1
-    #   inputs:
-    #     targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
-    #     artifact: 'manifest'
-    #     publishLocation: 'pipeline'
-# - stage: 
-#   displayName: Deploy to Dev.
-#   dependsOn: Build
-#   variables:
-#     acrsecret: obazsecret
-#   jobs:
-#   - deployment: deploy
-#     pool: ubuntu20
-#     displayName: Deploy to aks
-#     environment: 'obazenv.default'
-#     strategy:
-#      runOnce:
-#        deploy:  
-#         steps:
-#           - task: DownloadPipelineArtifact@2
-#             inputs:
-#               buildType: 'current'
-#               artifactName: 'manifest'
-#               targetPath: '$(Pipeline.Workspace)/manifests'  
-#           - task: KubernetesManifest@0
-#             inputs:
-#               action: 'createSecret'
-#               kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
-#               namespace: 'default'
-#               secretType: 'dockerRegistry'
-#               secretName: '$(acrsecret)'
-#               dockerRegistryEndpoint: 'docker-pro'
-#           - task: KubernetesManifest@0
-#             inputs:
-#               action: 'deploy'
-#               kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
-#               namespace: 'default'
-#               manifests: '$(Pipeline.Workspace)/manifests/deployment.yml'
+    - task: Docker@2
+      displayName: Build Docker image
+      inputs:
+        containerRegistry: 'docker-pro'
+        repository: 'keoffor/reimburse'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+          latest
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
+        artifact: 'manifest'
+        publishLocation: 'pipeline'
+- stage: 
+  displayName: Deploy to Dev.
+  dependsOn: Build
+  variables:
+    acrsecret: obazsecret
+  jobs:
+  - deployment: deploy
+    pool: ubuntu20
+    displayName: Deploy to aks
+    environment: 'obazenv.default'
+    strategy:
+     runOnce:
+       deploy:  
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'manifest'
+              targetPath: '$(Pipeline.Workspace)/manifests'  
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'createSecret'
+              kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
+              namespace: 'default'
+              secretType: 'dockerRegistry'
+              secretName: '$(acrsecret)'
+              dockerRegistryEndpoint: 'docker-pro'
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
+              namespace: 'default'
+              manifests: '$(Pipeline.Workspace)/manifests/deployment.yml'
