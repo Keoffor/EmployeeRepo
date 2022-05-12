@@ -40,41 +40,40 @@ stages:
         sonarQubeRunAnalysis: true
         isJacocoCoverageReportXML: true
         sqMavenPluginVersionChoice: 'latest'
-        
-    - task: Maven@3
-      displayName: publish artifacts
-      inputs:
-        mavenPomFile: 'pom.xml'
-        publishJUnitResults: true
-        testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        codeCoverageToolOption: 'JaCoCo'
-        javaHomeOption: 'JDKVersion'
-        mavenVersionOption: 'Default'
-        mavenAuthenticateFeed: true
-        effectivePomSkip: false
-        sonarQubeRunAnalysis: true
-        isJacocoCoverageReportXML: true
-        sqMavenPluginVersionChoice: 'latest'
-
-    - task: Docker@2
-      displayName: Build Docker image
-      inputs:
-        containerRegistry: 'docker-pro'
-        repository: 'keoffor/reimburse'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: |
-          $(Build.BuildId)
-          latest
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
-        artifact: 'manifest'
-        publishLocation: 'pipeline'
     - task: CmdLine@2
       inputs:
-        script: 'mvn deploy'
-        workingDirectory: '$(Pipeline.Workspace)'
+        script: mvn deploy
+        
+    # - task: Maven@3
+    #   displayName: publish artifacts
+    #   inputs:
+    #     mavenPomFile: 'pom.xml'
+    #     publishJUnitResults: true
+    #     testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    #     codeCoverageToolOption: 'JaCoCo'
+    #     javaHomeOption: 'JDKVersion'
+    #     mavenVersionOption: 'Default'
+    #     mavenAuthenticateFeed: true
+    #     effectivePomSkip: false
+    #     sonarQubeRunAnalysis: true
+    #     isJacocoCoverageReportXML: true
+    #     sqMavenPluginVersionChoice: 'latest'
+
+    # - task: Docker@2
+    #   displayName: Build Docker image
+    #   inputs:
+    #     containerRegistry: 'docker-pro'
+    #     repository: 'keoffor/reimburse'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '**/Dockerfile'
+    #     tags: |
+    #       $(Build.BuildId)
+    #       latest
+    # - task: PublishPipelineArtifact@1
+    #   inputs:
+    #     targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
+    #     artifact: 'manifest'
+    #     publishLocation: 'pipeline'
 # - stage: 
 #   displayName: Deploy to Dev.
 #   dependsOn: Build
