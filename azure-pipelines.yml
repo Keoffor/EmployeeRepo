@@ -94,8 +94,14 @@ stages:
           - task: KubernetesManifest@0
             inputs:
               action: 'createSecret'
+              kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
               namespace: 'default'
               secretType: 'dockerRegistry'
               secretName: '$(acrsecret)'
               dockerRegistryEndpoint: 'docker-pro'
-      
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
+              namespace: 'default'
+              manifests: '$(Pipeline.Workspace)/manifests/deployment.yml'
