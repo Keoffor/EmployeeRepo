@@ -7,7 +7,7 @@ trigger:
 - master
 stages:
 - stage: Build
-  displayName: build Maven package and Docker images
+  displayName: build artifacts
   pool: ubuntu20
   jobs:
   - job: build
@@ -42,7 +42,7 @@ stages:
         sqMavenPluginVersionChoice: 'latest'
         
     - task: Maven@3
-      displayName: publish artifacts
+      displayName: publish coverage
       inputs:
         mavenPomFile: 'pom.xml'
         publishJUnitResults: true
@@ -67,6 +67,7 @@ stages:
           $(Build.BuildId)
           latest
     - task: PublishPipelineArtifact@1
+      displayName: Publish artifacts
       inputs:
         targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
         artifact: 'manifest'
@@ -86,11 +87,13 @@ stages:
        deploy:  
         steps:
           - task: DownloadPipelineArtifact@2
+            displayName: download artifacts
             inputs:
               buildType: 'current'
               artifactName: 'manifest'
               targetPath: '$(Pipeline.Workspace)/manifests'  
           - task: KubernetesManifest@0
+            displayName: authenticate pull request
             inputs:
               action: 'createSecret'
               kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
@@ -98,9 +101,3 @@ stages:
               secretType: 'dockerRegistry'
               secretName: '$(acrsecret)'
               dockerRegistryEndpoint: 'docker-pro'
-          - task: KubernetesManifest@0
-            inputs:
-              action: 'deploy'
-              kubernetesServiceConnection: 'obazenv-myAKSCluster-default-1652353003809'
-              namespace: 'default'
-              manifests: '$(Pipeline.Workspace)/manifests/deployment.yml'
