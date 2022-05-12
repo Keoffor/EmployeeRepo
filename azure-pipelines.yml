@@ -55,6 +55,10 @@ stages:
         sonarQubeRunAnalysis: true
         isJacocoCoverageReportXML: true
         sqMavenPluginVersionChoice: 'latest'
+    - task: CmdLine@2
+      inputs:
+        script: |
+          mvn deploy    
 
     - task: Docker@2
       displayName: Build Docker image
