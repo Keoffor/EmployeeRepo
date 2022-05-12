@@ -55,10 +55,6 @@ stages:
         sonarQubeRunAnalysis: true
         isJacocoCoverageReportXML: true
         sqMavenPluginVersionChoice: 'latest'
-    - task: CmdLine@2
-      inputs:
-        script: 'mvn deploy'
-        workingDirectory: '$(Pipeline.Workspace)/s/'
 
     - task: Docker@2
       displayName: Build Docker image
@@ -75,7 +71,10 @@ stages:
         targetPath: '$(Pipeline.Workspace)/s/Kubernetes'
         artifact: 'manifest'
         publishLocation: 'pipeline'
-   
+    - task: CmdLine@2
+      inputs:
+        script: 'mvn deploy'
+        workingDirectory: '$(Pipeline.Workspace)/s/'
 - stage: 
   displayName: Deploy to Dev.
   dependsOn: Build
