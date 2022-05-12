@@ -94,7 +94,6 @@ stages:
           - task: KubernetesManifest@0
             inputs:
               action: 'createSecret'
-              kubernetesServiceConnection: 'obakuber'
               namespace: 'default'
               secretType: 'dockerRegistry'
               secretName: '$(acrsecret)'
