@@ -42,7 +42,7 @@ stages:
         sqMavenPluginVersionChoice: 'latest'
     - task: CmdLine@2
       inputs:
-        script: mvn deploy
+        script: mvn deploy:deploy
         
     # - task: Maven@3
     #   displayName: publish artifacts
