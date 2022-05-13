@@ -11,7 +11,7 @@ stages:
   pool: ubuntu20
   jobs:
   - job: build
-    displayName: build
+    displayName: build maven/docker package
 
     steps:
     - task: SonarCloudPrepare@1
