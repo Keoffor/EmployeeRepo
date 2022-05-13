@@ -31,4 +31,4 @@ server:
 
 api:
   config:
-    api2-url: ${EMAIL_URL}
+    api2-url: http://20.84.175.31:8001/email
