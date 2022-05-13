@@ -15,9 +15,9 @@ spec:
     spec:
       containers:
       - image: keoffor/reimburse:v1
-#        env:
-#          - name: VALIDATION
-#            value: http://$(USER_SERVICE_SERVICE_HOST):8081/users/validate
+        env:
+          - name: EMAIL_URL
+            value: http://20.84.175.31:8001/email
 #          - name: EUREKA_URI
 #            value: http://(EUREKA_SERVICE_SERVICE_HOST):8083/eureka
 #          - name: ANGULAR_URI

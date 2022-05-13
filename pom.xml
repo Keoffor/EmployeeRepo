@@ -99,14 +99,14 @@
 	</dependencies>
 	<distributionManagement>
 		<repository>
-			<id>obaz-container</id>
-			<url>https://pkgs.dev.azure.com/keoffor/Project0/_packaging/obaz-container/maven/v1</url>
+			<id>obaz-containers</id>
+			<url>https://pkgs.dev.azure.com/keoffor/Project0/_packaging/obaz-containers/maven/v1</url>
 		</repository>
 	</distributionManagement>
 	<repositories>
 		<repository>
-			<id>obaz-container</id>
-			<url>https://pkgs.dev.azure.com/keoffor/Project0/_packaging/obaz-container/maven/v1</url>
+			<id>obaz-containers</id>
+			<url>https://pkgs.dev.azure.com/keoffor/Project0/_packaging/obaz-containers/maven/v1</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
