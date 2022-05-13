@@ -7,7 +7,7 @@ trigger:
 - master
 stages:
 - stage: Build
-  displayName: build artifacts
+  displayName: build artifact
   pool: ubuntu20
   jobs:
   - job: build
