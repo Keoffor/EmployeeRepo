@@ -14,7 +14,7 @@ spec:
         app: reimburse-app
     spec:
       containers:
-      - image: keoffor/reimburse
+      - image: keoffor/reimburse-app
         env:
           - name: EMAIL_URL
             value: http://20.84.175.31:8001/email
