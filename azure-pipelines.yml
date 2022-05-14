@@ -11,7 +11,7 @@ stages:
   pool: ubuntu20
   variables:
     imageRepo: keoffor/reimburse
-    tag: '$(Build.BuildId)'
+    tag: $(Build.BuildId)
   jobs:
   - job: build
     displayName: build maven/docker package
@@ -66,8 +66,7 @@ stages:
         repository: '$(imageRepo)'
         command: 'buildAndPush'
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+        tags: '$(tag)'
     - task: PublishPipelineArtifact@1
       displayName: Publish artifacts
       inputs:
