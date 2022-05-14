@@ -65,7 +65,7 @@ stages:
         containerRegistry: 'docker-pro'
         repository: '$(imageRepo)'
         command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
     - task: PublishPipelineArtifact@1
