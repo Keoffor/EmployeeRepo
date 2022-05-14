@@ -93,10 +93,10 @@ stages:
             inputs:
               buildType: 'current'
               artifactName: 'manifest'
-              targetPath: '$(Pipeline.Workspace)/manifests' 
+              targetPath: '$(Pipeline.Workspace)/manifest'
           - task: replacetokens@5
             inputs:
-              rootDirectory: '$(Pipeline.Workspace)/manifests/'
+              rootDirectory: '$(Pipeline.Workspace)/manifest/'
               targetFiles: 'deployment.yml'
               encoding: 'auto'
               tokenPattern: 'custom'
