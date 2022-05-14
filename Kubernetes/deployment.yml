@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: reimburse-deployment
 spec:
-  replicas: 1
+  replicas: #replicaNo#
   selector:
     matchLabels:
       app: reimburse-app
@@ -47,15 +47,3 @@ spec:
       targetPort: 8000
   selector:
     app: reimburse-app
-#---
-#apiVersion: monitoring.coreos.com/v1
-#kind: ServiceMonitor
-#metadata:
-# name: reimburse-monitor
-#spec:
-# selector:
-#   matchLabels:
-#     app: service-app
-# endpoints:
-#   - port: service-http
-#     path: "/actuator/prometheus"
