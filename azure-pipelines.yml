@@ -63,10 +63,10 @@ stages:
       displayName: Build Docker image
       inputs:
         containerRegistry: 'docker-pro'
-        repository: $(imageRepo)
+        repository: '$(imageRepo)'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
-        tags: $(tag)
+        tags: '$(tag)'
     - task: PublishPipelineArtifact@1
       displayName: Publish artifacts
       inputs:
