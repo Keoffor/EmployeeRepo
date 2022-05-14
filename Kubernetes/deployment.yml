@@ -18,14 +18,6 @@ spec:
         env:
           - name: EMAIL_URL
             value: http://20.84.175.31:8001/email
-#          - name: EUREKA_URI
-#            value: http://(EUREKA_SERVICE_SERVICE_HOST):8083/eureka
-#          - name: ANGULAR_URI
-#            value: http://20.98.180.247:80
-#          - name: AWS_ACCESS_KEY
-#            value: AKIA4OK5FKIY3WZXH4XW
-#          - name:  AWS_SECRET_KEY
-#            value: 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
         imagePullPolicy: Always
         name: reimburse-container
         ports:
