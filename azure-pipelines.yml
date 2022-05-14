@@ -63,7 +63,7 @@ stages:
       displayName: Build Docker image
       inputs:
         containerRegistry: 'docker-pro'
-        repository: 'keoffor/reimburse'
+        repository: $(imageRepo)
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: $(tag)
@@ -110,6 +110,7 @@ stages:
               enableRecursion: false
               useLegacyPattern: false
               enableTelemetry: true
+
           - task: KubernetesManifest@0
             displayName: authenticate pull request
             inputs:
