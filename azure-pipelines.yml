@@ -5,13 +5,13 @@
 
 trigger:
 - master
+variables:
+  imageRepo: keoffor/reimburse
+  tag: $(Build.BuildId)
 stages:
 - stage: Build
   displayName: build artifact
   pool: ubuntu20
-  variables:
-    imageRepo: keoffor/reimburse
-    tag: $(Build.BuildId)
   jobs:
   - job: build
     displayName: build maven/docker package
