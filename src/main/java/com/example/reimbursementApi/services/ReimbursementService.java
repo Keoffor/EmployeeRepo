@@ -84,7 +84,7 @@ public class ReimbursementService {
      */
     public List<ReimbursementResponse> allRequest() {
         List<Reimbursement> getUsers = getAllRequest();
-        List<ReimbursementResponse> response = getUsers.stream().map(em -> {
+        List<ReimbursementResponse>  response = getUsers.stream().map(em -> {
             ReimbursementResponse res = new ReimbursementResponse();
             res.setReimbursementId(em.getReimbursementId());
             res.setEmail(em.getEmail());

@@ -1,6 +1,6 @@
 package com.example.reimbursementApi.utils;
 
-public class LoginResponse {
+public class  LoginResponse {
     private boolean isError;
     private String authToken;
     private String messge;

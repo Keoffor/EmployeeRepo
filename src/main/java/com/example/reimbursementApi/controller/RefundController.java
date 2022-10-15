@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reimbursement")
-public class RefundController {
+public class  RefundController {
     @Value("${api.config.api2-url}")
     String email_url;
 
@@ -31,7 +31,7 @@ public class RefundController {
     public ResponseEntity makeRequest(@RequestBody RequestorForm form){
         Reimbursement res = reimbursementService.requestForm(form);
         if (res!=null){
-            restTemplate.postForEntity(email_url+"/send",res.getEmail(),null );
+            restTemplate.postForEntity(email_url+"/send",res.getEmail(),String.class );
             return ResponseEntity.status(HttpStatus.OK).body("request successfully submitted");
         }else{
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("wrong employee id");
